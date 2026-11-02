@@ -1,22 +1,22 @@
 
+function validarTexto(valor, campo) {
+  if (
+    typeof valor !== "string" ||
+    valor.trim() === ""
+  ) {
+    throw new Error(`${campo} no puede estar vacío`);
+  }
+
+  return valor.trim();
+}
+
 export function registrarComentario(tema, comentario) {
-  if (
-    typeof tema !== "string" ||
-    tema.trim() === ""
-  ) {
-    throw new Error("El tema es obligatorio");
-  }
-
-  if (
-    typeof comentario !== "string" ||
-    comentario.trim() === ""
-  ) {
-    throw new Error("El comentario no puede estar vacío");
-  }
-
   return {
-    tema: tema.trim(),
-    comentario: comentario.trim(),
+    tema: validarTexto(tema, "El tema"),
+    comentario: validarTexto(
+      comentario,
+      "El comentario"
+    ),
     estado: "pendiente",
     observacion: ""
   };
