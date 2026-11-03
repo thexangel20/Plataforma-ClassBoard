@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ClassBoard - Entrega de tareas</title>
+  <link rel="stylesheet" href="./estilos.css">
+</head>
+
+<body>
+  <main class="contenedor">
+
+    <h1>ClassBoard</h1>
+    <h2>Entrega de tareas</h2>
+
+    <p>Historia de Usuario HU-01</p>
+
+    <form id="formulario-entrega">
+
+      <label for="estudiante">Código de estudiante</label>
+      <input
+        id="estudiante"
+        type="text"
+        value="E01"
+      >
+
+      <label for="tarea">Código de tarea</label>
+      <input
+        id="tarea"
+        type="text"
+        value="T01"
+      >
+
+      <label for="tipo">Tipo de entrega</label>
+      <select id="tipo">
+        <option value="texto">Texto</option>
+        <option value="enlace">Enlace</option>
+      </select>
+
+      <label for="contenido">Contenido de la tarea</label>
+      <textarea
+        id="contenido"
+        rows="5"
+        placeholder="Escribe tu tarea o pega un enlace"
+      ></textarea>
+
+      <button type="submit">
+        Validar entrega
+      </button>
+
+    </form>
+
+    <p id="resultado" role="status"></p>
+
+  </main>
+
+  <script type="module" src="./ui.js"></script>
+</body>
+</html>
