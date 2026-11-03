@@ -21,3 +21,7 @@ export function registrarComentario(tema, comentario) {
     observacion: ""
   };
 }
+
+export function revisarComentario() {
+  throw new Error("Revisión sin implementar");
+}
