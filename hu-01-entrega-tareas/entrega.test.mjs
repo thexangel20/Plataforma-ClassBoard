@@ -1,29 +1,26 @@
 
-import test from "node:test";
-import assert from "node:assert/strict";
-import { registrarEntrega } from "./entrega.mjs";
-
-// PRUEBA 1: registrar una entrega válida
-test("ET-02: registrar una entrega de texto", () => {
+test("ET-02: permitir entrega mediante enlace HTTPS", () => {
   const entrega = registrarEntrega({
     estudianteId: "E01",
     tareaId: "T01",
-    tipo: "texto",
-    contenido: "Esta es mi tarea"
+    tipo: "enlace",
+    contenido: "https://ejemplo.com/mi-tarea"
   });
 
-  assert.equal(entrega.tipo, "texto");
-  assert.equal(entrega.contenido, "Esta es mi tarea");
+  assert.equal(entrega.tipo, "enlace");
+  assert.equal(
+    entrega.contenido,
+    "https://ejemplo.com/mi-tarea"
+  );
 });
 
-// PRUEBA 2: rechazar una entrega vacía
-test("ET-02: no permitir texto vacío", () => {
+test("ET-02: rechazar enlaces no permitidos", () => {
   assert.throws(() => {
     registrarEntrega({
       estudianteId: "E01",
       tareaId: "T01",
-      tipo: "texto",
-      contenido: ""
+      tipo: "enlace",
+      contenido: "javascript:alert(1)"
     });
-  }, /vacío/);
+  }, /enlace inválido/i);
 });
