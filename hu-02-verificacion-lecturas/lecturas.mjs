@@ -22,6 +22,22 @@ export function registrarComentario(tema, comentario) {
   };
 }
 
-export function revisarComentario() {
-  throw new Error("Revisión sin implementar");
+
+export function revisarComentario(
+  registro,
+  correcto,
+  observacion
+) {
+  if (typeof correcto !== "boolean") {
+    throw new Error("Resultado de revisión inválido");
+  }
+
+  return {
+    ...registro,
+    estado: correcto ? "correcto" : "incorrecto",
+    observacion: validarTexto(
+      observacion,
+      "La observación"
+    )
+  };
 }
