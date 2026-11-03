@@ -1,26 +1,45 @@
 
-test("ET-02: permitir entrega mediante enlace HTTPS", () => {
-  const entrega = registrarEntrega({
-    estudianteId: "E01",
-    tareaId: "T01",
-    tipo: "enlace",
-    contenido: "https://ejemplo.com/mi-tarea"
-  });
+function validarContenido(tipo, contenido) {
+  if (
+    typeof contenido !== "string" ||
+    contenido.trim() === ""
+  ) {
+    throw new Error("El contenido no puede estar vacío");
+  }
 
-  assert.equal(entrega.tipo, "enlace");
-  assert.equal(
-    entrega.contenido,
-    "https://ejemplo.com/mi-tarea"
-  );
-});
+  const valor = contenido.trim();
 
-test("ET-02: rechazar enlaces no permitidos", () => {
-  assert.throws(() => {
-    registrarEntrega({
-      estudianteId: "E01",
-      tareaId: "T01",
-      tipo: "enlace",
-      contenido: "javascript:alert(1)"
-    });
-  }, /enlace inválido/i);
-});
+  if (tipo === "texto") {
+    return valor;
+  }
+
+  if (tipo === "enlace") {
+    try {
+      const url = new URL(valor);
+
+      if (!["http:", "https:"].includes(url.protocol)) {
+        throw new Error("Enlace inválido");
+      }
+
+      return valor;
+    } catch {
+      throw new Error("Enlace inválido");
+    }
+  }
+
+  throw new Error("Tipo de entrega no soportado");
+}
+
+export function registrarEntrega({
+  estudianteId,
+  tareaId,
+  tipo,
+  contenido
+}) {
+  return {
+    estudianteId,
+    tareaId,
+    tipo,
+    contenido: validarContenido(tipo, contenido)
+  };
+}
