@@ -1,61 +1,52 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>ClassBoard - Entrega de tareas</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ClassBoard | HU-01 Entrega de tareas</title>
   <link rel="stylesheet" href="./estilos.css">
 </head>
-
 <body>
-  <main class="contenedor">
-
-    <h1>ClassBoard</h1>
-    <h2>Entrega de tareas</h2>
-
-    <p>Historia de Usuario HU-01</p>
-
-    <form id="formulario-entrega">
-
-      <label for="estudiante">Código de estudiante</label>
-      <input
-        id="estudiante"
-        type="text"
-        value="E01"
-      >
-
-      <label for="tarea">Código de tarea</label>
-      <input
-        id="tarea"
-        type="text"
-        value="T01"
-      >
-
-      <label for="tipo">Tipo de entrega</label>
-      <select id="tipo">
-        <option value="texto">Texto</option>
-        <option value="enlace">Enlace</option>
-      </select>
-
-      <label for="contenido">Contenido de la tarea</label>
-      <textarea
-        id="contenido"
-        rows="5"
-        placeholder="Escribe tu tarea o pega un enlace"
-      ></textarea>
-
-      <button type="submit">
-        Validar entrega
-      </button>
-
-    </form>
-
-    <p id="resultado" role="status"></p>
-
+  <header class="cabecera">
+    <div class="contenedor"><p class="eyebrow">ClassBoard · Historia HU-01</p><h1>Entrega de tareas</h1>
+    <p>Prototipo académico: validación de inscripción, tipos de entrega, fechas, consulta y calificación.</p></div>
+  </header>
+  <main class="contenedor cuadricula">
+    <section class="tarjeta">
+      <h2>Estudiante</h2>
+      <label for="estudiante">Selecciona un estudiante de demostración</label>
+      <select id="estudiante"><option value="E01">E01 · Estudiante 1</option><option value="E02">E02 · Estudiante 2</option><option value="E03">E03 · Sin inscripciones</option></select>
+      <label for="tarea">Tareas de sus materias inscritas</label>
+      <select id="tarea"></select>
+      <form id="form-entrega">
+        <label for="tipo">Tipo de entrega</label>
+        <select id="tipo"><option value="texto">Texto</option><option value="enlace">Enlace (http/https)</option><option value="archivo">Archivo local</option></select>
+        <div id="grupo-texto"><label for="contenido">Texto o enlace</label><textarea id="contenido" rows="4" placeholder="Escribe la tarea o pega https://..."></textarea></div>
+        <div id="grupo-archivo" hidden><label for="archivo">Selecciona un archivo existente</label><input id="archivo" type="file"><small>Solo registramos el nombre y tamaño; no se suben los datos.</small></div>
+        <button type="submit">Registrar entrega</button>
+      </form>
+      <button type="button" class="secundario" id="consultar">Consultar mi entrega</button>
+      <pre id="salida-estudiante" class="salida" aria-live="polite">Elige una tarea para comenzar.</pre>
+    </section>
+    <section class="tarjeta">
+      <h2>Docente (simulación)</h2>
+      <p class="aviso">Elegir un docente es una simulación de roles: aquí no hay login ni seguridad real de usuarios.</p>
+      <label for="docente">Docente que solicita acceso</label>
+      <select id="docente"><option value="D01">D01 · Materia M01</option><option value="D02">D02 · Materia M02</option></select>
+      <label for="tarea-docente">Tarea a revisar</label>
+      <select id="tarea-docente"><option value="T01">T01 · Ensayo</option><option value="T02">T02 · Práctica</option></select>
+      <button type="button" class="secundario" id="ver-entregas">Ver entregas autorizadas</button>
+      <form id="form-calificacion">
+        <label for="estudiante-calificar">Estudiante a calificar</label>
+        <select id="estudiante-calificar"><option value="E01">E01</option><option value="E02">E02</option><option value="E03">E03</option></select>
+        <label for="nota">Nota (0 a 20)</label><input type="number" id="nota" min="0" max="20" step="0.1" required>
+        <label for="observacion">Observación</label><textarea id="observacion" rows="3" required></textarea>
+        <button type="submit">Guardar calificación</button>
+      </form>
+      <pre id="salida-docente" class="salida" aria-live="polite">Sin consultas.</pre>
+    </section>
   </main>
-
+  <footer class="contenedor pie">Demo de clase: datos en memoria, se pierden al recargar. Los archivos seleccionados no se almacenan.</footer>
   <script type="module" src="./ui.js"></script>
 </body>
 </html>

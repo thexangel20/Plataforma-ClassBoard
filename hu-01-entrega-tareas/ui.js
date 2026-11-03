@@ -1,52 +1,74 @@
-
-import { registrarEntrega } from "./entrega.mjs";
-
-// Buscamos el formulario en HTML.
-const formulario = document.querySelector(
-  "#formulario-entrega"
-);
-
-// Aquí mostraremos el resultado.
-const resultado = document.querySelector("#resultado");
-
-// Detectamos cuando alguien pulsa el botón.
-formulario.addEventListener("submit", (evento) => {
-
-  // Evitamos que la página se recargue.
-  evento.preventDefault();
-
-  // Obtenemos los datos del formulario.
-  const estudianteId =
-    document.querySelector("#estudiante").value;
-
-  const tareaId =
-    document.querySelector("#tarea").value;
-
-  const tipo =
-    document.querySelector("#tipo").value;
-
-  const contenido =
-    document.querySelector("#contenido").value;
-
-  // Intentamos validar la entrega.
+import { GestorEntregas } from './entrega.mjs';
+const $ = (id) => document.getElementById(id);
+const isoDesdeAhora = (dias) => new Date(Date.now() + dias * 86400000).toISOString();
+const gestor = new GestorEntregas({
+  materias: [
+    { codigo: 'M01', nombre: 'Sistemas', docenteId: 'D01', inscritos: ['E01', 'E02'] },
+    { codigo: 'M02', nombre: 'Estadística', docenteId: 'D02', inscritos: ['E02'] }
+  ],
+  tareas: [
+    { codigo: 'T01', titulo: 'Ensayo de sistemas', materiaId: 'M01', limiteUTC: isoDesdeAhora(3) },
+    { codigo: 'T02', titulo: 'Práctica vencida', materiaId: 'M02', limiteUTC: isoDesdeAhora(-1) }
+  ]
+});
+function mostrar(id, texto, error = false) {
+  $(id).textContent = typeof texto === 'string' ? texto : JSON.stringify(texto, null, 2);
+  $(id).classList.toggle('error', error);
+}
+function actualizarTareas() {
+  const tareas = gestor.listarTareas($('estudiante').value);
+  $('tarea').replaceChildren();
+  for (const t of tareas) {
+    const opcion = document.createElement('option');
+    opcion.value = t.codigo;
+    opcion.textContent = `${t.codigo} · ${t.titulo} (límite ${new Date(t.limiteUTC).toLocaleString()})`;
+    $('tarea').append(opcion);
+  }
+  $('tarea').disabled = tareas.length === 0;
+  mostrar('salida-estudiante', tareas.length ? `Tareas disponibles: ${tareas.length}.` : 'No tiene tareas de materias inscritas.');
+}
+function actualizarTipo() {
+  const archivo = $('tipo').value === 'archivo';
+  $('grupo-texto').hidden = archivo;
+  $('grupo-archivo').hidden = !archivo;
+}
+$('estudiante').addEventListener('change', actualizarTareas);
+$('tipo').addEventListener('change', actualizarTipo);
+$('form-entrega').addEventListener('submit', (e) => {
+  e.preventDefault();
   try {
-    const entrega = registrarEntrega({
-      estudianteId,
-      tareaId,
-      tipo,
+    const contenido = $('tipo').value === 'archivo' ? $('archivo').files[0] : $('contenido').value;
+    const entrega = gestor.enviar({
+      estudianteId: $('estudiante').value,
+      tareaId: $('tarea').value,
+      tipo: $('tipo').value,
       contenido
     });
-
-    resultado.textContent =
-      `Entrega validada (${entrega.tipo}). ` +
-      "Demostración sin almacenamiento.";
-
-    resultado.style.color = "green";
-
-  } catch (error) {
-
-    resultado.textContent = error.message;
-
-    resultado.style.color = "red";
-  }
+    mostrar('salida-estudiante', entrega);
+  } catch (error) { mostrar('salida-estudiante', error.message, true); }
 });
+$('consultar').addEventListener('click', () => {
+  const entrega = gestor.consultar($('estudiante').value, $('tarea').value);
+  mostrar('salida-estudiante', entrega ?? 'No hay entrega registrada para ese estudiante y tarea.');
+});
+$('ver-entregas').addEventListener('click', () => {
+  try {
+    mostrar('salida-docente', gestor.verEntregas($('docente').value, $('tarea-docente').value));
+  } catch (error) { mostrar('salida-docente', error.message, true); }
+});
+$('form-calificacion').addEventListener('submit', (e) => {
+  e.preventDefault();
+  try {
+    const notaCadena = $('nota').value;
+    const nota = notaCadena === '' ? NaN : Number(notaCadena);
+    mostrar('salida-docente', gestor.calificar({
+      docenteId: $('docente').value,
+      estudianteId: $('estudiante-calificar').value,
+      tareaId: $('tarea-docente').value,
+      nota,
+      observacion: $('observacion').value
+    }));
+  } catch (error) { mostrar('salida-docente', error.message, true); }
+});
+actualizarTipo();
+actualizarTareas();
