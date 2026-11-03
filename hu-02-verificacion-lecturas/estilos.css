@@ -1,0 +1,158 @@
+
+/* ========================================
+   CLASSBOARD - ESTILOS GENERALES
+   ======================================== */
+
+/* Configuración general */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Cuerpo de la página */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #eef2f8;
+    color: #1e293b;
+    min-height: 100vh;
+    padding: 30px 15px;
+}
+
+/* Contenedor principal */
+.contenedor {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Títulos */
+h1 {
+    color: #2563eb;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+h2 {
+    color: #1e293b;
+    font-size: 23px;
+    margin-bottom: 10px;
+}
+
+h3 {
+    color: #334155;
+    font-size: 18px;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+/* Párrafos */
+p {
+    margin-top: 10px;
+    line-height: 1.5;
+}
+
+/* Etiquetas */
+label {
+    display: block;
+    margin-top: 18px;
+    margin-bottom: 6px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Campos de texto, listas y áreas de texto */
+input,
+select,
+textarea {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    background-color: #ffffff;
+    color: #1e293b;
+}
+
+/* Efecto al seleccionar un campo */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* Área de texto */
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Botones */
+button {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    margin-top: 22px;
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 7px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+/* Efecto al pasar el mouse */
+button:hover {
+    background-color: #1d4ed8;
+}
+
+/* Efecto al presionar */
+button:active {
+    transform: scale(0.99);
+}
+
+/* Mensajes de resultado */
+#resultado {
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* Separadores */
+hr {
+    margin: 25px 0;
+    border: none;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* Adaptación a celulares */
+@media (max-width: 480px) {
+    body {
+        padding: 15px 10px;
+    }
+
+    .contenedor {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 25px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+}
