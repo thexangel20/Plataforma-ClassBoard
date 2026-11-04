@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  color: #1f2937;
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+section {
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+}
+
+li {
+  margin: 0.5rem 0;
+}
