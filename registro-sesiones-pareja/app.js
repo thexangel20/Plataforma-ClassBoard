@@ -20,10 +20,26 @@ let editingDuration = false; // true mientras se edita la duración de la sesió
 
 const $ = id => document.getElementById(id);
 
+let toastTimer = null;
+function toast(msg, type = '') {
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
 const esc = s => String(s).replace(/[&<>"']/g, c =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+// Código de sesión con el mismo formato que usa el módulo de control de roles: PP-AAAAMMDD-XXXX
+function makeSessionId() {
+  const d = new Date();
+  const ymd = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+  return `PP-${ymd}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+}
 
 function todayISO() {
   const d = new Date();
@@ -70,7 +86,11 @@ function downloadFile(name, content, type) {
 function loadSessions() {
   try {
     const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    return Array.isArray(data) ? data : [];
+    if (!Array.isArray(data)) return [];
+    let changed = false;
+    data.forEach(s => { if (!s.codigo) { s.codigo = makeSessionId(); changed = true; } });
+    if (changed) localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    return data;
   } catch (e) {
     return [];
   }
@@ -196,6 +216,13 @@ function swUseTime() {
 
 /* ---------- Formulario de nueva sesión ---------- */
 
+let formBaseline = '';
+
+function formSnapshot() {
+  return [$('fecha').value, $('duracion').value, $('ejercicio').value.trim(),
+          $('integrante1').value.trim(), $('integrante2').value.trim()].join('|');
+}
+
 function prefillForm() {
   $('fecha').value = todayISO();
   const last = [...sessions].sort((a, b) => b.creadaEn - a.creadaEn)[0];
@@ -203,6 +230,7 @@ function prefillForm() {
     $('integrante1').value = last.integrantes[0];
     $('integrante2').value = last.integrantes[1];
   }
+  formBaseline = formSnapshot();
 }
 
 function onSaveSession(e) {
@@ -223,6 +251,7 @@ function onSaveSession(e) {
 
   const session = {
     id: uid(),
+    codigo: makeSessionId(),
     fecha,
     duracion,
     ejercicio,
@@ -237,6 +266,7 @@ function onSaveSession(e) {
   $('ejercicio').value = '';
   swReset();
   prefillForm();
+  toast(`Sesión guardada. Código: ${session.codigo}`);
   openSession(session.id);
 }
 
@@ -309,7 +339,7 @@ function renderHistory() {
       <li class="session-item">
         <div>
           <strong>${esc(s.ejercicio)}</strong>
-          <div class="meta">${fmtFecha(s.fecha)} · ${fmtDuracion(s.duracion)} · ${esc(s.integrantes.join(' y '))}</div>
+          <div class="meta">${fmtFecha(s.fecha)} · Código ${esc(s.codigo)} · ${fmtDuracion(s.duracion)} · ${esc(s.integrantes.join(' y '))}</div>
           <div class="counts">
             ${s.entradas.length} entrada(s) ·
             ${mejoras.length} mejora(s): ${pendientes} pendiente(s), ${resueltas} resuelta(s)
@@ -326,6 +356,7 @@ function exportJSON() {
   if (!sessions.length) return alert('No hay sesiones para exportar.');
   const data = { version: 1, exportadoEn: new Date().toISOString(), sesiones: sessions };
   downloadFile(`registro-sesiones-${todayISO()}.json`, JSON.stringify(data, null, 2), 'application/json;charset=utf-8');
+  toast('Respaldo JSON descargado.');
 }
 
 function csvCell(value) {
@@ -336,12 +367,12 @@ function csvCell(value) {
 function exportCSV() {
   if (!sessions.length) return alert('No hay sesiones para exportar.');
   const rows = [[
-    'Fecha', 'Duración (min)', 'Ejercicio', 'Integrante 1', 'Integrante 2',
+    'Código de sesión', 'Fecha', 'Duración (min)', 'Ejercicio', 'Integrante 1', 'Integrante 2',
     'Tipo', 'Descripción', 'Registrado por', 'Fecha de registro', 'Estado (solo mejoras)'
   ]];
 
   sessions.forEach(s => {
-    const base = [s.fecha, s.duracion, s.ejercicio, s.integrantes[0], s.integrantes[1]];
+    const base = [s.codigo, s.fecha, s.duracion, s.ejercicio, s.integrantes[0], s.integrantes[1]];
     if (!s.entradas.length) {
       rows.push([...base, '', '', '', '', '']);
       return;
@@ -358,6 +389,7 @@ function exportCSV() {
 
   const csv = '\uFEFF' + rows.map(r => r.map(csvCell).join(',')).join('\r\n');
   downloadFile(`registro-sesiones-${todayISO()}.csv`, csv, 'text/csv;charset=utf-8');
+  toast('Tabla CSV descargada.');
 }
 
 /* ---------- Detalle de sesión ---------- */
@@ -444,7 +476,7 @@ function renderDetail() {
 
   $('detailHeader').innerHTML = `
     <h2>${esc(s.ejercicio)}</h2>
-    <p class="hint">${fmtFecha(s.fecha)}</p>
+    <p class="hint">${fmtFecha(s.fecha)} · Código de sesión: <b>${esc(s.codigo)}</b></p>
     <div class="stats">
       <span>Duración: <b>${fmtDuracion(s.duracion)}</b></span>
       <span>Integrantes: <b>${esc(s.integrantes.join(' y '))}</b></span>
@@ -494,6 +526,7 @@ function onAddEntry(e) {
   saveSessions();
   $('entryDesc').value = '';
   renderDetail();
+  toast(`${TIPO_LABEL[tipo]} agregada.`);
 }
 
 function saveEditedEntry(id) {
@@ -591,6 +624,7 @@ function onDeleteSession() {
   sessions = sessions.filter(x => x.id !== currentId);
   saveSessions();
   currentId = null;
+  toast('Sesión eliminada.', 'warn');
   showView('history');
 }
 
@@ -602,7 +636,7 @@ function onDeleteSession() {
 function hasUnsaved() {
   const editing = editingEntryId !== null || editingDuration;
   const entryDraft = $('entryDesc').value.trim() !== '';
-  const sessionDraft = $('ejercicio').value.trim() !== '' || $('duracion').value !== '';
+  const sessionDraft = formSnapshot() !== formBaseline;
   const stopwatch = sw.status === 'running' || sw.status === 'paused';
   return editing || entryDraft || sessionDraft || stopwatch;
 }
