@@ -1,13 +1,9 @@
 # Plataforma-ClassBoard
 
-Plataforma web colaborativa para la gestión del aula.
+Aula para registrar dudas académicas, consultar temas y publicar respuestas docentes.
 
-## Registro de dudas académicas
+Abre `web/index.html` en un navegador. La interfaz usa HTML para la estructura, CSS para el diseño y JavaScript para los formularios, los filtros y la lógica de dudas. Funciona sin instalar paquetes ni ejecutar un servidor.
 
-Esta entrega agrega la lógica inicial para que estudiantes registren preguntas sobre temas estudiados y docentes puedan responderlas. La historia de usuario, los criterios de aceptación, las tarjetas CRC y el ciclo TDD están en [docs/hu-registro-dudas.md](docs/hu-registro-dudas.md).
+Las dudas y los temas se guardan en el almacenamiento local del navegador. Si abres la página en otro navegador, dispositivo o dirección, se abre otro tablero. La opción de responder como docente solicita un nombre y no usa cuentas.
 
-La lógica está en **dudas.py** y las pruebas automatizadas usan la biblioteca estándar de Python. Para ejecutarlas desde la raíz del repositorio:
-
-    python -m unittest discover -s tests -v
-
-El repositorio todavía no contiene la aplicación web ni una base de datos. Por eso, esta implementación conserva las dudas en memoria y queda lista para conectarse cuando se incorpore la estructura real de la aplicación.
+La historia de usuario, los criterios de aceptación y las tarjetas CRC están en [docs/hu-registro-dudas.md](docs/hu-registro-dudas.md).

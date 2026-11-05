@@ -18,7 +18,7 @@
 
 ## Tarjetas CRC
 
-### CRC 1 — Duda
+### CRC 1 — Duda (registro JavaScript)
 
 | Responsabilidades | Colaboradores |
 | --- | --- |
@@ -33,33 +33,21 @@
 | Validar que tema, pregunta, estudiante, respuesta y docente no estén vacíos. | Duda |
 | Registrar y listar temas. | |
 | Registrar dudas y asignar identificadores. | |
-| Listar dudas y filtrar por estado. | |
+| Consultar y guardar el tablero en el almacenamiento local. | |
 | Guardar la respuesta y marcar la duda como respondida. | |
-| Consultar una duda por identificador. | |
+| Buscar una duda por identificador para responder. | |
 
-## Pruebas TDD
+## Implementación y verificación
 
-Las pruebas están en tests/test_dudas.py y se ejecutan sin dependencias adicionales:
+La interfaz en `web/index.html` permite agregar temas, publicar dudas,
+filtrar por estado y consultar las respuestas. `web/classboard.js` valida
+los datos y gestiona los cambios de estado. `web/interfaz.js` conecta los
+formularios y aplica el filtro al tablero.
 
-    python -m unittest discover -s tests -v
+Para comprobar el flujo, registra un tema y una duda. Filtra por pendientes,
+responde la duda, filtra por respondidas y recarga la página. La respuesta
+debe seguir disponible. Prueba también un campo que contenga solo espacios:
+el tablero debe quedar igual.
 
-| Criterio | Prueba |
-| --- | --- |
-| 1 | Consultar el catálogo y agregar un tema |
-| 2 y 7 | Registrar una duda y comprobar su estado inicial pendiente |
-| 3 | Rechazar una pregunta vacía o con espacios |
-| 4 | Listar las dudas registradas |
-| 5 y 7 | Responder una duda y verificar el cambio de estado |
-| 6 | Consultar una duda respondida |
-| 7 | Filtrar dudas pendientes y respondidas |
-| Validación de apoyo | Rechazar respuestas vacías y búsquedas de IDs inexistentes |
-
-### Ciclo RED–GREEN–REFACTOR aplicado
-
-1. **RED:** se escribieron las pruebas antes de dudas.py; al ejecutarlas, fallaron porque todavía no existía el módulo.
-2. **GREEN:** se implementaron Duda y GestorDudas para satisfacer los comportamientos comprobados.
-3. **REFACTOR:** se agruparon las validaciones de texto en _texto_obligatorio y se representó el estado con EstadoDuda, manteniendo las pruebas verdes.
-
-## Alcance de esta entrega
-
-El repositorio actualmente solo contiene un README y no incluye el código de la aplicación web ni una base de datos. La implementación de dudas.py es una capa de dominio funcional que guarda datos en memoria; su conexión con pantallas, usuarios autenticados y persistencia queda pendiente de incorporar la estructura real de la aplicación.
+Las dudas se guardan en el navegador. Los nombres se usan como etiquetas de
+autor, sin autenticación ni sincronización entre dispositivos.
