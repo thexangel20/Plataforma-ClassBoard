@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import {obtenerAulas, obtenerTareasPendientes, ordenarTareasPorFecha} from "./home.js";
+import {obtenerAulas, obtenerTareasPendientes, ordenarTareasPorFecha, obtenerAvisosRecientes} from "./home.js";
 
 describe("Panel de inicio", () => {
   it("debe devolver las aulas del usuario", () => {
@@ -55,5 +55,24 @@ describe("Panel de inicio", () => {
       resultado.map((tarea) => tarea.id),
       [2, 3, 1]
     );
+  });
+
+  it("debe devolver los avisos recientes", () => {
+    const avisos = [
+      {
+        id: 1,
+        titulo: "Cambio de horario",
+        contenido: "La clase del viernes será a las 10:00.",
+        fecha: "2026-11-04"
+      },
+      {
+        id: 2,
+        titulo: "Material disponible",
+        contenido: "Ya está disponible el material de estudio.",
+        fecha: "2026-11-03"
+      }
+    ];
+
+    assert.deepEqual(obtenerAvisosRecientes(avisos), avisos);
   });
 });
