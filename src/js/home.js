@@ -14,6 +14,13 @@ export function ordenarTareasPorFecha(tareas) {
   });
 }
 
+// Convertir fecha al formato dd/mm/aa
+export function formatearFecha(fecha) {
+  const [anio, mes, dia] = fecha.split("-");
+
+  return `${dia}/${mes}/${anio.slice(-2)}`;
+}
+
 //Obtener los avisos recientes
 export function obtenerAvisosRecientes(avisos) {
   return avisos;
@@ -44,7 +51,7 @@ function mostrarTareasPendientes(tareas) {
     obtenerTareasPendientes(tareas)
   ).forEach((tarea) => {
     const elemento = document.createElement("li");
-    elemento.textContent = `${tarea.titulo} - Fecha límite: ${tarea.fechaLimite}`;
+    elemento.textContent = `${tarea.titulo} - Fecha límite: ${formatearFecha(tarea.fechaLimite)}`;
     listaTareas.appendChild(elemento);
   });
 }

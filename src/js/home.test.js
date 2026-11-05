@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import {obtenerAulas, obtenerTareasPendientes, ordenarTareasPorFecha, obtenerAvisosRecientes} from "./home.js";
+import {obtenerAulas, obtenerTareasPendientes, ordenarTareasPorFecha, obtenerAvisosRecientes, formatearFecha} from "./home.js";
 
 describe("Panel de inicio", () => {
   it("debe devolver las aulas del usuario", () => {
@@ -74,5 +74,50 @@ describe("Panel de inicio", () => {
     ];
 
     assert.deepEqual(obtenerAvisosRecientes(avisos), avisos);
+  });
+  
+  it("no debe modificar el arreglo original al ordenar las tareas", () => {
+    const tareas = [
+      {
+        id: 1,
+        titulo: "Tarea lejana",
+        fechaLimite: "2026-11-15"
+      },
+      {
+        id: 2,
+        titulo: "Tarea próxima",
+        fechaLimite: "2026-11-08"
+      }
+    ];
+
+    const copiaOriginal = [...tareas];
+
+    ordenarTareasPorFecha(tareas);
+
+    assert.deepEqual(tareas, copiaOriginal);
+  });
+
+  it("debe devolver una lista vacía cuando no hay tareas pendientes", () => {
+    const tareas = [
+      {
+        id: 1,
+        titulo: "Práctica entregada",
+        estado: "completada"
+      }
+    ];
+
+    assert.deepEqual(obtenerTareasPendientes(tareas), []);
+  });
+
+  it("debe devolver una lista vacía cuando el usuario no tiene aulas", () => {
+    assert.deepEqual(obtenerAulas([]), []);
+  });
+
+  it("debe devolver una lista vacía cuando no hay avisos", () => {
+    assert.deepEqual(obtenerAvisosRecientes([]), []);
+  });
+
+  it("debe convertir una fecha al formato dd/mm/aa", () => {
+    assert.equal(formatearFecha("2026-11-08"), "08/11/26");
   });
 });
