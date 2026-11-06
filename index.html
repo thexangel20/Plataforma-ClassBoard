@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClassBoard | Inicio</title>
+    <link rel="stylesheet" href="./src/css/styles.css" />
+    <link rel="stylesheet" href="./src/css/navigation.css" />
+  </head>
+
+  <body>
+    <header>
+      <h1>ClassBoard</h1>
+
+      <nav class="classboard-nav" aria-label="Navegación principal">
+        <a href="./index.html">Inicio</a>
+
+        <a href="./hu-01-entrega-tareas/index.html"> Entrega de tareas </a>
+
+        <a href="./hu-02-verificacion-lecturas/index.html">
+          Verificación de lecturas
+        </a>
+
+        <a href="./registro-sesiones-pareja/index.html"> Sesiones de pareja </a>
+
+        <a href="./registro-roles-pareja/index.html"> Registro de roles </a>
+      </nav>
+    </header>
+
+    <main>
+      <h2>Panel de inicio</h2>
+
+      <section aria-labelledby="titulo-aulas">
+        <h2 id="titulo-aulas">Mis aulas</h2>
+        <ul id="lista-aulas"></ul>
+      </section>
+
+      <section aria-labelledby="titulo-tareas">
+        <h2 id="titulo-tareas">Tareas pendientes</h2>
+        <ul id="lista-tareas"></ul>
+      </section>
+
+      <section aria-labelledby="titulo-avisos">
+        <h2 id="titulo-avisos">Avisos recientes</h2>
+        <ul id="lista-avisos"></ul>
+      </section>
+    </main>
+
+    <script type="module" src="./src/js/home.js"></script>
+  </body>
+</html>

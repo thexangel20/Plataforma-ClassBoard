@@ -1,0 +1,43 @@
+
+/* Navegación compartida de ClassBoard */
+
+.classboard-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 12px;
+  background-color: #173653;
+  border-radius: 8px;
+}
+
+.classboard-nav a {
+  display: inline-block;
+  padding: 9px 13px;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease;
+}
+
+.classboard-nav a:hover {
+  background-color: #285477;
+}
+
+.classboard-nav a:focus-visible {
+  outline: 2px solid #ffd43b;
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .classboard-nav {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .classboard-nav a {
+    text-align: center;
+  }
+}

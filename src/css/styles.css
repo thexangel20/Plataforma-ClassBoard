@@ -1,0 +1,46 @@
+body {
+  margin: 0;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  color: #1f2937;
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+section {
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+}
+
+li {
+  margin: 0.5rem 0;
+}
+
+header {
+  padding: 20px;
+  background-color: #173653;
+  color: white;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+nav a:hover {
+  background-color: #285477;
+}

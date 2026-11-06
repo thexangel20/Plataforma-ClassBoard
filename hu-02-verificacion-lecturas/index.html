@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>ClassBoard - Verificación de lecturas</title>
+    <link rel="stylesheet" href="./estilos.css" />
+    <link rel="stylesheet" href="../src/css/navigation.css" />
+  </head>
+
+  <body>
+    <main class="contenedor">
+      <h1>ClassBoard</h1>
+
+      <nav class="classboard-nav" aria-label="Navegación principal">
+        <a href="../index.html">Inicio</a>
+        <a href="../hu-01-entrega-tareas/index.html">Entrega de tareas</a>
+        <a href="../hu-02-verificacion-lecturas/index.html"
+          >Verificación de lecturas</a
+        >
+        <a href="../registro-sesiones-pareja/index.html">Sesiones de pareja</a>
+        <a href="../registro-roles-pareja/index.html">Registro de roles</a>
+      </nav>
+
+      <h2><br>Verificación de lecturas</h2>
+
+      <h3>Registrar comentario</h3>
+
+      <form id="formulario-comentario">
+        <label for="tema">Tema leído</label>
+        <input id="tema" type="text" placeholder="Ejemplo: TDD" />
+
+        <label for="comentario">Comentario del estudiante</label>
+        <textarea
+          id="comentario"
+          rows="4"
+          placeholder="Escribe lo que aprendiste"
+        ></textarea>
+
+        <button type="submit">Registrar comentario</button>
+      </form>
+
+      <hr />
+
+      <h3>Revisión del docente (simulación)</h3>
+
+      <form id="formulario-revision">
+        <label for="estado">Evaluación</label>
+        <select id="estado">
+          <option value="correcto">Correcto</option>
+          <option value="incorrecto">Incorrecto</option>
+        </select>
+
+        <label for="observacion">Observación</label>
+        <textarea
+          id="observacion"
+          rows="3"
+          placeholder="Escribe una observación"
+        ></textarea>
+
+        <button type="submit">Registrar revisión</button>
+      </form>
+
+      <p id="resultado" role="status"></p>
+    </main>
+
+    <script type="module" src="./ui.js"></script>
+  </body>
+</html>

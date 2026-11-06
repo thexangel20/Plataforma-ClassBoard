@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro de Sesiones de Pair Programming</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="../src/css/navigation.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header>
+        <h1>Registro de sesiones de programación por parejas</h1>
+        <p class="subtitle">
+          Documenta observaciones, decisiones y mejoras de cada sesión
+        </p>
+
+        <nav class="classboard-nav" aria-label="Navegación principal">
+          <a href="../index.html">Inicio</a>
+          <a href="../hu-01-entrega-tareas/index.html">Entrega de tareas</a>
+          <a href="../hu-02-verificacion-lecturas/index.html"
+            >Verificación de lecturas</a
+          >
+          <a href="../registro-sesiones-pareja/index.html"
+            >Sesiones de pareja</a
+          >
+          <a href="../registro-roles-pareja/index.html">Registro de roles</a>
+        </nav>
+      </header>
+
+      <nav class="tabs">
+        <button class="tab active" data-view="new">Nueva sesión</button>
+        <button class="tab" data-view="history">Historial</button>
+      </nav>
+
+      <!-- NUEVA SESIÓN -->
+      <section id="viewNew" class="view">
+        <div class="card">
+          <h2>Datos de la sesión</h2>
+          <form id="sessionForm" novalidate>
+            <div class="grid2">
+              <label
+                >Fecha
+                <input type="date" id="fecha" />
+              </label>
+              <label
+                >Duración (minutos)
+                <input
+                  type="number"
+                  id="duracion"
+                  min="1"
+                  max="1440"
+                  step="1"
+                  placeholder="Ej. 90"
+                />
+              </label>
+            </div>
+            <label
+              >Ejercicio trabajado
+              <input
+                id="ejercicio"
+                maxlength="120"
+                placeholder="Ej. Ejercicio 3 – Gestor de tareas"
+              />
+            </label>
+            <div class="grid2">
+              <label
+                >Integrante 1
+                <input id="integrante1" maxlength="40" placeholder="Nombre" />
+              </label>
+              <label
+                >Integrante 2
+                <input id="integrante2" maxlength="40" placeholder="Nombre" />
+              </label>
+            </div>
+            <p id="formError" class="error"></p>
+            <button type="submit">Guardar sesión</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2>Cronómetro de apoyo</h2>
+          <div id="swDisplay" class="sw-display">00:00:00</div>
+          <div class="controls">
+            <button id="swStart">▶ Iniciar cronómetro</button>
+            <button id="swPause" class="secondary" disabled>⏸ Pausar</button>
+            <button id="swStop" class="danger" disabled>■ Detener</button>
+            <button id="swReset" class="ghost" disabled>↺ Reiniciar</button>
+          </div>
+          <button id="swUse" class="secondary" disabled>
+            Usar este tiempo como duración
+          </button>
+          <p id="swUseMsg" class="hint"></p>
+          <p class="hint">
+            El cronómetro solo ayuda a medir el tiempo. La duración se guarda
+            únicamente cuando la introduces en el campo de arriba.
+          </p>
+        </div>
+      </section>
+
+      <!-- HISTORIAL -->
+      <section id="viewHistory" class="view hidden">
+        <div class="card">
+          <h2>Historial de sesiones</h2>
+          <div class="filters">
+            <label
+              >Buscar
+              <input
+                id="fTexto"
+                placeholder="Ejercicio, integrante o texto de una entrada"
+              />
+            </label>
+            <label
+              >Integrante
+              <select id="fIntegrante">
+                <option value="">Todos</option>
+              </select>
+            </label>
+            <label
+              >Estado de mejoras
+              <select id="fEstado">
+                <option value="todas">Todas</option>
+                <option value="pendiente">Con pendientes</option>
+                <option value="resuelta">Con resueltas</option>
+              </select>
+            </label>
+            <label
+              >Desde
+              <input type="date" id="fDesde" />
+            </label>
+            <label
+              >Hasta
+              <input type="date" id="fHasta" />
+            </label>
+            <button id="fLimpiar" class="secondary small">
+              Limpiar filtros
+            </button>
+          </div>
+          <p id="resultCount" class="hint"></p>
+          <div class="controls">
+            <button id="exportJsonBtn" class="secondary small">
+              ⬇ Exportar respaldo (JSON)
+            </button>
+            <button id="exportCsvBtn" class="secondary small">
+              ⬇ Exportar tabla (CSV)
+            </button>
+          </div>
+          <ul id="sessionList" class="list"></ul>
+        </div>
+      </section>
+
+      <!-- DETALLE -->
+      <section id="viewDetail" class="view hidden">
+        <button id="backBtn" class="secondary small">
+          ← Volver al historial
+        </button>
+
+        <div class="card">
+          <div id="detailHeader"></div>
+        </div>
+
+        <div class="card">
+          <h3>Agregar entrada</h3>
+          <form id="entryForm" novalidate>
+            <div class="grid2">
+              <label
+                >Tipo
+                <select id="entryTipo">
+                  <option value="observacion">Observación</option>
+                  <option value="decision">Decisión</option>
+                  <option value="mejora">Mejora identificada</option>
+                </select>
+              </label>
+              <label
+                >Registrado por
+                <select id="entryAutor"></select>
+              </label>
+            </div>
+            <label
+              >Descripción
+              <textarea
+                id="entryDesc"
+                rows="3"
+                maxlength="500"
+                placeholder="Ej. Se detectó que la función calcular() tiene demasiadas líneas"
+              ></textarea>
+            </label>
+            <p id="entryError" class="error"></p>
+            <button type="submit">Agregar entrada</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h3>Observaciones</h3>
+          <ul id="listObs" class="list"></ul>
+        </div>
+        <div class="card">
+          <h3>Decisiones</h3>
+          <ul id="listDec" class="list"></ul>
+        </div>
+        <div class="card">
+          <h3>Mejoras identificadas</h3>
+          <ul id="listMej" class="list"></ul>
+        </div>
+
+        <div class="card">
+          <button id="deleteSessionBtn" class="danger small">
+            Eliminar esta sesión
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
