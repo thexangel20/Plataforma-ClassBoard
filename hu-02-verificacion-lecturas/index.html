@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ClassBoard - Verificación de lecturas</title>
+  <link rel="stylesheet" href="./estilos.css">
+</head>
+
+<body>
+  <main class="contenedor">
+
+    <h1>ClassBoard</h1>
+    <h2>Verificación de lecturas</h2>
+
+    <h3>Registrar comentario</h3>
+
+    <form id="formulario-comentario">
+
+      <label for="tema">Tema leído</label>
+      <input
+        id="tema"
+        type="text"
+        placeholder="Ejemplo: TDD"
+      >
+
+      <label for="comentario">Comentario del estudiante</label>
+      <textarea
+        id="comentario"
+        rows="4"
+        placeholder="Escribe lo que aprendiste"
+      ></textarea>
+
+      <button type="submit">
+        Registrar comentario
+      </button>
+
+    </form>
+
+    <hr>
+
+    <h3>Revisión del docente (simulación)</h3>
+
+    <form id="formulario-revision">
+
+      <label for="estado">Evaluación</label>
+      <select id="estado">
+        <option value="correcto">Correcto</option>
+        <option value="incorrecto">Incorrecto</option>
+      </select>
+
+      <label for="observacion">Observación</label>
+      <textarea
+        id="observacion"
+        rows="3"
+        placeholder="Escribe una observación"
+      ></textarea>
+
+      <button type="submit">
+        Registrar revisión
+      </button>
+
+    </form>
+
+    <p id="resultado" role="status"></p>
+
+  </main>
+
+  <script type="module" src="./ui.js"></script>
+</body>
+</html>
