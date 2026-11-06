@@ -44,3 +44,19 @@ test("conserva la respuesta al volver a abrir el gestor y rechaza una segunda", 
     assert.equal(guardada.docente, "Luis");
     assert.equal(guardada.estado, "respondida");
 });
+
+test("solo permite comentar respuestas y conserva los comentarios al reabrir", () => {
+    const { gestor, almacen } = tableroNuevo();
+    const { dudas: [duda] } = gestor.registrar({ tema: "XP", pregunta: "¿Qué es XP?", estudiante: "Ana" });
+    assert.throws(() => gestor.comentar(duda.id, { autor: "Ana", comentario: "Gracias" }), /debe tener una respuesta/);
+    assert.equal(gestor.consultar().dudas[0].comentarios, undefined);
+    gestor.responder(duda.id, { docente: "Luis", respuesta: "Extreme Programming" });
+    assert.throws(() => gestor.comentar(duda.id, { autor: "Ana", comentario: " " }), /comentario/);
+    gestor.comentar(duda.id, { autor: " Ana ", comentario: " Gracias " });
+    const [guardada] = new GestorDudas(almacen).consultar().dudas;
+    assert.equal(guardada.estado, "respondida");
+    assert.equal(guardada.respuesta, "Extreme Programming");
+    assert.equal(guardada.comentarios.length, 1);
+    assert.equal(guardada.comentarios[0].autor, "Ana");
+    assert.equal(guardada.comentarios[0].texto, "Gracias");
+});

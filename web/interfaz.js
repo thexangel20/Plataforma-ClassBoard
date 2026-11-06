@@ -43,16 +43,11 @@ function conectarFormulario(formulario, guardar, mensaje) {
     });
 }
 
-function formularioRespuesta(duda) {
-    const panel = elemento("details");
-    panel.append(elemento("summary", "Responder como docente"));
+function formularioAporte(id, campos, boton, guardar, mensaje) {
     const formulario = elemento("form");
-    for (const [campo, etiqueta, tipo, limite] of [
-        ["docente", "Nombre del docente", "input", 120],
-        ["respuesta", "Respuesta", "textarea", 5000],
-    ]) {
+    for (const [campo, etiqueta, tipo, limite] of campos) {
         const entrada = elemento(tipo);
-        entrada.id = `${campo}-${duda.id}`;
+        entrada.id = `${campo}-${id}`;
         entrada.name = campo;
         entrada.required = true;
         entrada.maxLength = limite;
@@ -60,9 +55,43 @@ function formularioRespuesta(duda) {
         rotulo.htmlFor = entrada.id;
         formulario.append(rotulo, entrada);
     }
-    formulario.append(elemento("button", "Publicar respuesta"));
-    conectarFormulario(formulario, datos => gestor.responder(duda.id, datos), "Respuesta publicada.");
-    panel.append(formulario);
+    formulario.append(elemento("button", boton));
+    conectarFormulario(formulario, guardar, mensaje);
+    return formulario;
+}
+
+function formularioRespuesta(duda) {
+    const panel = elemento("details");
+    const campos = [
+        ["docente", "Tu nombre", "input", 120],
+        ["respuesta", "Respuesta", "textarea", 5000],
+    ];
+    panel.append(elemento("summary", "Responder"),
+        formularioAporte(duda.id, campos, "Publicar respuesta",
+            datos => gestor.responder(duda.id, datos), "Respuesta publicada."));
+    return panel;
+}
+
+function hiloComentarios(duda) {
+    const comentarios = duda.comentarios ?? [];
+    const panel = elemento("details");
+    panel.append(elemento("summary", comentarios.length ? `Comentar (${comentarios.length})` : "Comentar"));
+    if (comentarios.length) {
+        panel.open = true;
+        const lista = elemento("ul", undefined, "comentarios");
+        for (const comentario of comentarios) {
+            const entrada = elemento("li");
+            entrada.append(elemento("strong", comentario.autor), elemento("p", comentario.texto));
+            lista.append(entrada);
+        }
+        panel.append(lista);
+    }
+    const campos = [
+        ["autor", "Tu nombre", "input", 120],
+        ["comentario", "Comentario", "textarea", 5000],
+    ];
+    panel.append(formularioAporte(duda.id, campos, "Publicar comentario",
+        datos => gestor.comentar(duda.id, datos), "Comentario publicado."));
     return panel;
 }
 
@@ -79,7 +108,7 @@ function tarjetaDuda(duda) {
     if (respondida) {
         const respuesta = elemento("div", undefined, "answer");
         respuesta.append(elemento("p", duda.respuesta), elemento("small", `Respuesta de ${duda.docente}`));
-        tarjeta.append(respuesta);
+        tarjeta.append(respuesta, hiloComentarios(duda));
     } else {
         tarjeta.append(formularioRespuesta(duda));
     }

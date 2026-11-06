@@ -55,6 +55,18 @@ class GestorDudas {
         return this.guardar(tablero);
     }
 
+    comentar(id, { comentario, autor }) {
+        const texto = this.texto(comentario, "comentario");
+        const nombre = this.texto(autor, "nombre");
+        const tablero = this.consultar();
+        const duda = tablero.dudas.find(item => item.id === id);
+        if (!duda) throw new Error("No se encontró la duda.");
+        if (duda.estado !== "respondida") throw new Error("La duda debe tener una respuesta para comentar.");
+        duda.comentarios ??= [];
+        duda.comentarios.push({ autor: nombre, texto });
+        return this.guardar(tablero);
+    }
+
     incorporarTema(tablero, tema) {
         const existente = tablero.temas.find(item => item.toLowerCase() === tema.toLowerCase());
         if (existente) return existente;
