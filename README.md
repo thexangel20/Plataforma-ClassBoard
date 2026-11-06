@@ -1,6 +1,10 @@
 # Plataforma-ClassBoard
 
-Aula para registrar dudas académicas, consultar temas y publicar respuestas docentes.
+Plataforma web colaborativa para la gestión del aula
+
+## Registro de dudas académicas
+
+El módulo permite registrar dudas, consultar temas y publicar respuestas docentes.
 
 Abre `web/index.html` en un navegador. La interfaz usa HTML para la estructura, CSS para el diseño y JavaScript para los formularios, los filtros y la lógica de dudas. Funciona sin instalar paquetes ni ejecutar un servidor.
 
